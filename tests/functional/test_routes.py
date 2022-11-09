@@ -1,4 +1,4 @@
-from iebank_api import app
+from iebank_api import app, db
 import pytest
 
 def test_get_accounts(testing_client):
@@ -8,6 +8,20 @@ def test_get_accounts(testing_client):
     THEN check the response is valid
     """
     response = testing_client.get('/accounts')
+    assert response.status_code == 200
+
+def test_get_account_specific(testing_client):
+
+    response = testing_client.get('/accounts/1')
+
+    assert response.status_code == 200
+
+def test_update_account(testing_client):
+    response = testing_client.put('/accounts/1',json={'name': 'John Doe', 'currency': '€'})
+    assert response.status_code == 200
+
+def test_delete_account(testing_client):
+    response = testing_client.delete('/accounts/1')
     assert response.status_code == 200
 
 def test_dummy_wrong_path():
@@ -28,5 +42,3 @@ def test_create_account(testing_client):
     """
     response = testing_client.post('/accounts', json={'name': 'John Doe', 'currency': '€'})
     assert response.status_code == 200
-
-
